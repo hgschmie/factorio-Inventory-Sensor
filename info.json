@@ -7,5 +7,9 @@
   "homepage": "https://forums.factorio.com/viewtopic.php?f=97&t=30454",
   "description": "Adds a combinator that reads inventories, fuel and equipment grid of locomotives, wagons, cars, furnaces, assemblers, roboports, rocket silos and reactors.",
   "factorio_version": "2.0",
-  "dependencies": ["base >= 2.0.0"]
+  "dependencies": ["base >= 2.0.0"],
+  "package": {
+    "git_publish_branch": "main",
+    "sync_portal_details": false
+  }
 }

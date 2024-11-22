@@ -516,11 +516,13 @@ end
 local function init_events()
   script.on_event( defines.events.on_built_entity, OnEntityCreated, EVENT_FILTER )
   script.on_event( defines.events.on_robot_built_entity, OnEntityCreated, EVENT_FILTER )
+  script.on_event( defines.events.on_space_platform_built_entity, OnEntityCreated, EVENT_FILTER )
   script.on_event( defines.events.on_entity_cloned, OnEntityCreated, EVENT_FILTER )
   script.on_event( {defines.events.script_raised_built, defines.events.script_raised_revive}, OnEntityCreated )
 
   script.on_event( defines.events.on_pre_player_mined_item, OnEntityRemoved, EVENT_FILTER )
   script.on_event( defines.events.on_robot_pre_mined, OnEntityRemoved, EVENT_FILTER )
+  script.on_event( defines.events.on_space_platform_pre_mined, OnEntityRemoved, EVENT_FILTER )
   script.on_event( defines.events.on_entity_died, OnEntityRemoved, EVENT_FILTER )
   script.on_event( defines.events.script_raised_destroy, OnEntityRemoved )
 

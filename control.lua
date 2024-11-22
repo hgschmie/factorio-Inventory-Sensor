@@ -486,7 +486,7 @@ function UpdateSensor(itemSensor)
       items[name] = (items[name] or 0) + 1
     end
     for k, v in pairs(items) do
-      signals[signalIndex] = { value = {type = "item",name = k}, min = v }
+      signals[signalIndex] = { value = {type = "item", name = k, quality= 'normal', }, min = v }
       signalIndex = signalIndex+1
     end
   end

@@ -248,14 +248,22 @@ end
 
 function ResetSensors()
   storage.ItemSensors = storage.ItemSensors or {}
+  local remove = {}
   for i=1, #storage.ItemSensors do
     local itemSensor = storage.ItemSensors[i]
-    itemSensor.ID = itemSensor.Sensor.unit_number
-    itemSensor.ScanArea = GetScanArea(itemSensor.Sensor)
-    itemSensor.SkipEntityScanning = false
-    itemSensor.ConnectedEntity = nil
-    itemSensor.Inventory = {}
-    SetConnectedEntity(itemSensor)
+    if itemSensor.Sensor and itemSensor.Sensor.valid then
+        itemSensor.ID = itemSensor.Sensor.unit_number
+        itemSensor.ScanArea = GetScanArea(itemSensor.Sensor)
+        itemSensor.SkipEntityScanning = false
+        itemSensor.ConnectedEntity = nil
+        itemSensor.Inventory = {}
+        SetConnectedEntity(itemSensor)
+    else
+        table.insert(remove, 1, i)
+    end
+  end
+  for _, pos in pairs(remove) do
+    table.remove(storage.ItemSensors, pos)
   end
 end
 

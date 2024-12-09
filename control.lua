@@ -23,6 +23,7 @@ local BOILER = "boiler"
 local GENERATOR = "generator"
 local STORAGE_TANK = "storage-tank"
 local CARGO_LANDING_PAD = 'cargo-landing-pad'
+local INFINITYCHEST = 'infinity-container'
 
 -- initialize variables
 local SupportedTypes = {
@@ -45,6 +46,7 @@ local SupportedTypes = {
   [GENERATOR] = true,
   [STORAGE_TANK] = true,
   [CARGO_LANDING_PAD] = true,
+  [INFINITYCHEST] = true,
 }
 
 local Entity_Blacklist = {

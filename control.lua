@@ -194,6 +194,8 @@ function OnTick(event)
 
     -- log("[IS] "..storage.tickCount.." / "..game.tick.." updating sensors "..storage.SensorIndex.." to "..lastIndex)
     for i=storage.SensorIndex, lastIndex do
+      if i > #storage.ItemSensors then break end
+
       local itemSensor = storage.ItemSensors[i]
       -- log("[IS] skipScan: "..tostring(itemSensor.SkipEntityScanning).." LastScan: "..tostring(itemSensor.LastScanned).."/"..game.tick)
 

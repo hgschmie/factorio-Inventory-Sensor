@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2024-12-08
+  Features:
+    - add support for infinity chest
+  Bugfixes:
+    - fix crash when sensor entities are mass-invalidated
+---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2024-11-22
   Features:

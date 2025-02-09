@@ -503,12 +503,26 @@ function UpdateSensor(itemSensor)
     end
   end
 
+  -- Compact the found signals, removing duplicated to avoid crash
+  for i=1,#signals do
+	for j=1,i-1 do
+		if signals[j] ~= nil and signals[i].value.name == signals[j].value.name and signals[i].value.quality == signals[j].value.quality and signals[i].value.type == signals[j].value.type then
+			signals[j].min = signals[j].min + signals[i].min
+			signals[i] = nil
+			break
+		end
+	end
+  end
+
   local control_behavior = sensor.get_control_behavior() --[[@as LuaConstantCombinatorControlBehavior ]]
   local section = control_behavior.get_section(1)
   assert(section)
   section.filters = {}
+  -- Since the compacted signal table can have nil's inside, we keep track themselves of the signal slot
+  local currentIndex = 1
   for idx, signal in pairs(signals) do
-    section.set_slot(idx, signal)
+		section.set_slot(currentIndex, signal)
+		currentIndex = currentIndex+1
   end
 end
 

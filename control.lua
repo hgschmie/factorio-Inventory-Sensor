@@ -279,23 +279,11 @@ function GetScanArea(sensor)
   end
 end
 
--- range iterator for for-loops
-local function range (from, to)
-  return function(_, last)
-    if last >= to then
-      return nil
-    else
-      return last + 1
-    end
-  end, nil, from - 1
-end
-
--- iterator over either indices or constant range from 1 to 8
-local function rangeOrPairs(indices)
-  if indices then
-     return pairs(indices)
-  else
-     return range(1, 8)
+-- adds inventory of entity indexed by ndx to itemSensor
+local function addInventory(itemSensor, entity, ndx)
+  local inv = entity.get_inventory(ndx)
+  if inv then
+    itemSensor.Inventory[ndx] = inv
   end
 end
 
@@ -303,11 +291,14 @@ end
 function SetInventories(itemSensor, entity, indices)
   itemSensor.Inventory = {}
 
-  for _, ndx in rangeOrPairs(indices) do
-      local inv = entity.get_inventory(ndx)
-      if inv then
-        itemSensor.Inventory[ndx] = inv
-      end
+  if (indices) then
+    for _, ndx in pairs(indices) do
+      addInventory(itemSensor, entity, ndx)
+    end
+  else
+    for ndx=1, 8 do -- iterate blindly over every possible inventory and store the result so we have to do it only once
+      addInventory(itemSensor, entity, ndx)
+    end
   end
 end
 

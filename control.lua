@@ -279,15 +279,35 @@ function GetScanArea(sensor)
   end
 end
 
--- cache inventories, keep inventory index
-function SetInventories(itemSensor, entity)
-  itemSensor.Inventory = {}
-  local inv = nil
-  for i=1, 8 do -- iterate blindly over every possible inventory and store the result so we have to do it only once
-    inv = entity.get_inventory(i)
-    if inv then
-      itemSensor.Inventory[i] = inv
+-- range iterator for for-loops
+local function range (from, to)
+  return function(_, last)
+    if last >= to then
+      return nil
+    else
+      return last + 1
     end
+  end, nil, from - 1
+end
+
+-- iterator over either indices or constant range from 1 to 8
+local function rangeOrPairs(indices)
+  if indices then
+     return pairs(indices)
+  else
+     return range(1, 8)
+  end
+end
+
+-- cache inventories, keep inventory index
+function SetInventories(itemSensor, entity, indices)
+  itemSensor.Inventory = {}
+
+  for _, ndx in rangeOrPairs(indices) do
+      local inv = entity.get_inventory(ndx)
+      if inv then
+        itemSensor.Inventory[ndx] = inv
+      end
   end
 end
 
@@ -429,7 +449,14 @@ function UpdateSensor(itemSensor)
 
   elseif connectedEntity.type == SILO then
     -- rocket inventory is nil when no rocket is ready so we have to constantly grab all possible inventories.
-    SetInventories(itemSensor, connectedEntity)
+
+    SetInventories(itemSensor, connectedEntity, {
+                                                   defines.inventory.rocket_silo_rocket,
+                                                   defines.inventory.rocket_silo_trash,
+                                                   defines.inventory.rocket_silo_input,
+                                                   defines.inventory.rocket_silo_output,
+                                                   defines.inventory.rocket_silo_modules,
+                                               })
 
     local parts = connectedEntity.rocket_parts
     -- rocket_parts becomes 0 when a rocket is built and lifted up for launch

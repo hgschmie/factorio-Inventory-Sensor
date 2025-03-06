@@ -279,14 +279,25 @@ function GetScanArea(sensor)
   end
 end
 
+-- adds inventory of entity indexed by ndx to itemSensor
+local function addInventory(itemSensor, entity, ndx)
+  local inv = entity.get_inventory(ndx)
+  if inv then
+    itemSensor.Inventory[ndx] = inv
+  end
+end
+
 -- cache inventories, keep inventory index
-function SetInventories(itemSensor, entity)
+function SetInventories(itemSensor, entity, indices)
   itemSensor.Inventory = {}
-  local inv = nil
-  for i=1, 8 do -- iterate blindly over every possible inventory and store the result so we have to do it only once
-    inv = entity.get_inventory(i)
-    if inv then
-      itemSensor.Inventory[i] = inv
+
+  if (indices) then
+    for _, ndx in pairs(indices) do
+      addInventory(itemSensor, entity, ndx)
+    end
+  else
+    for ndx=1, 8 do -- iterate blindly over every possible inventory and store the result so we have to do it only once
+      addInventory(itemSensor, entity, ndx)
     end
   end
 end
@@ -429,7 +440,14 @@ function UpdateSensor(itemSensor)
 
   elseif connectedEntity.type == SILO then
     -- rocket inventory is nil when no rocket is ready so we have to constantly grab all possible inventories.
-    SetInventories(itemSensor, connectedEntity)
+
+    SetInventories(itemSensor, connectedEntity, {
+                                                   defines.inventory.rocket_silo_rocket,
+                                                   defines.inventory.rocket_silo_trash,
+                                                   defines.inventory.rocket_silo_input,
+                                                   defines.inventory.rocket_silo_output,
+                                                   defines.inventory.rocket_silo_modules,
+                                               })
 
     local parts = connectedEntity.rocket_parts
     -- rocket_parts becomes 0 when a rocket is built and lifted up for launch
